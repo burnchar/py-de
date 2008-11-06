@@ -7,7 +7,7 @@ http://zetcode.com/tutorials/pyqt4/
 
 http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qtextedit.html
 
-=== Internationalisation of PyQt Applications ===
+=== Internationalization of PyQt4 Applications ===
 
 http://docs.huihoo.com/pyqt/pyqt4.html#internationalisation-of-pyqt-applications
 
