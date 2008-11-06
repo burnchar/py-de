@@ -5,6 +5,8 @@
 
 http://zetcode.com/tutorials/pyqt4/
 
+http://wiki.python.org/moin/PyQt
+
 http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qtextedit.html
 
 === Internationalization of PyQt4 Applications ===
