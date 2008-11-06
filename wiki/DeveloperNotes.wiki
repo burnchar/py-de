@@ -4,6 +4,7 @@
 = QT Tutorials =
 
 http://zetcode.com/tutorials/pyqt4/
+
 http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qtextedit.html
 
 = QT Calculator by Charles Burns =
