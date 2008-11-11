@@ -211,6 +211,13 @@ class Ui_py_de(object):
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
+    
+    #Select language according to the user
+    translator = QtCore.QTranslator()
+    locale = QtCore.QLocale.system().name().section('_', 0, 0)
+    #translator.load(QtCore.QString("pyde_") + locale)  #or translator.load("pyde_fr"); to have directly french version
+    app.installTranslator(translator)
+    
     py_de = QtGui.QMainWindow()
     ui = Ui_py_de()
     ui.setupUi(py_de)
