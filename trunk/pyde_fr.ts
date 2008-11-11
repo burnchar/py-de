@@ -21,7 +21,7 @@
     <message>
         <location filename="py-de.py" line="180"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edition</translation>
     </message>
     <message>
         <location filename="py-de.py" line="198"/>
@@ -31,7 +31,7 @@
     <message>
         <location filename="py-de.py" line="182"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Outils</translation>
     </message>
     <message>
         <location filename="py-de.py" line="183"/>
@@ -56,17 +56,17 @@
     <message>
         <location filename="py-de.py" line="188"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout selectionner</translation>
     </message>
     <message>
         <location filename="py-de.py" line="189"/>
         <source>Find</source>
-        <translation type="unfinished"></translation>
+        <translation>Cherche</translation>
     </message>
     <message>
         <location filename="py-de.py" line="190"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplace</translation>
     </message>
     <message>
         <location filename="py-de.py" line="191"/>
