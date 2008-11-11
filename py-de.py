@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'menu.ui'
@@ -106,7 +107,7 @@ class Ui_py_de(object):
         self.actionQuit.setObjectName("actionQuit")
 
         self.actionBuild = QtGui.QAction(py_de)
-        self.actionBuild.setIcon(QtGui.QIcon("../../../Desktop/arrowBG.png"))
+        self.actionBuild.setIcon(QtGui.QIcon("arrowBG.png"))
         self.actionBuild.setObjectName("actionBuild")
 
         self.actionBuild_All = QtGui.QAction(py_de)
