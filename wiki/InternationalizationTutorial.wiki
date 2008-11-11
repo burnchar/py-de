@@ -1,0 +1,22 @@
+#labels developers
+== Code norms ==
+
+Each visible string must be used with the translate method:
+
+{{{
+QtGui.QApplication.translate("className", "string", "comment", encoding)
+}}}
+
+Example:
+{{{
+self.menuFile.setTitle(QtGui.QApplication.translate("py_de", "File", None, QtGui.QApplication.UnicodeUTF8))
+}}}
+
+Note: the comment is here to help the translator in cases where the translation could be
+ambiguous.
+
+== Generate xml files ==
+
+== Generate binary files ==
+
+== Adapt internationalization to the application ==
