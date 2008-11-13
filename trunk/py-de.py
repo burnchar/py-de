@@ -136,6 +136,7 @@ class Ui_py_de(object):
 
         self.actionC_Header_File_h = QtGui.QAction(py_de)
         self.actionC_Header_File_h.setObjectName("actionC_Header_File_h")
+	
         self.menuNew.addAction(self.actionC)
         self.menuNew.addAction(self.actionC_Header_File_h)
         self.menuNew.addAction(self.actionPython_File)
@@ -171,7 +172,10 @@ class Ui_py_de(object):
         QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
+	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.template)
+	
         QtCore.QMetaObject.connectSlotsByName(py_de)
+
 
     def retranslateUi(self, py_de):
         py_de.setWindowTitle(QtGui.QApplication.translate("py_de", "py_de", None, QtGui.QApplication.UnicodeUTF8))
@@ -206,6 +210,23 @@ class Ui_py_de(object):
         self.actionPython_File.setText(QtGui.QApplication.translate("py_de", "Python File (.py)", None, QtGui.QApplication.UnicodeUTF8))
         self.actionC_Header_File_h.setText(QtGui.QApplication.translate("py_de", "C++ Header File (.h)", None, QtGui.QApplication.UnicodeUTF8))
 
+   
+    def template(self):
+      #-------Test-------------------------------------------------------------------------------------
+      # 1. Detect language selected
+      # 2. If templates are associated to this language show pop up window
+      # 3. Load list of templates  and display them in a list + option "empty file"
+      # 4. Load tempplate selected and copy it on the self.textEdit
+      
+      # Upgrade: in tools menu, add some functionalities for templates (add/remove template...) - 
+      
+      templates  = QtCore.QStringList()
+      templates.append("Empty")
+      templates.append("Hello World")
+      QtGui.QInputDialog.getItem(self.centralwidget, 
+           QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8), 
+	   QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8), 
+	   templates)
 
 
 if __name__ == "__main__":
