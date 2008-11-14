@@ -17,6 +17,15 @@ ambiguous.
 
 == Generate xml files ==
 
+ # All the python files that you need to translate have to referenced in the py-de.pro after the "SOURCES" tag.
+ # In py-de.pro, after "TRANSLATION" tag, write the xml files (.ts) that you need: one file for each language. Name them:
+  * pyde_fr.ts: french version
+  * pyde_es.ts: spanish version
+ # Finally launch the following command to generate this files: 
+
+
+
+
 == Generate binary files ==
 
 == Adapt internationalization to the application ==
