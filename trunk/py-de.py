@@ -16,25 +16,45 @@ class Ui_py_de(object):
         py_de.setObjectName("py_de")
         py_de.resize(QtCore.QSize(QtCore.QRect(0,0,502,499).size()).expandedTo(py_de.minimumSizeHint()))
 
-        self.centralwidget = QtGui.QWidget(py_de)
-        self.centralwidget.setObjectName("centralwidget")
+#       self.centralwidget = QtGui.QWidget(py_de)
+#       self.centralwidget.setObjectName("centralwidget")
 
-        self.textEdit = QtGui.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(100,90,321,221))
+        self.tabWidget = QtGui.QTabWidget(py_de)
+        self.tabWidget.setGeometry(QtCore.QRect(50,50,200,200))
+        self.tabWidget.setObjectName("tabWidget")
 
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed,QtGui.QSizePolicy.Maximum)
+        self.tab = QtGui.QWidget()
+        self.tab.setObjectName("tab")
+
+	self.tablayout = QtGui.QGridLayout(self.tab)
+
+        self.textEdit = QtGui.QTextEdit(self.tab)
+#        self.textEdit.setGeometry(QtCore.QRect(100,90,321,221))
+
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Policy(1),QtGui.QSizePolicy.Policy(1))
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy)
         self.textEdit.setObjectName("textEdit")
-	font = QtGui.QFont()
-	font.setFamily("Consolas")
-	font.setFixedPitch(True)
-	font.setPointSize(10)
+
+	self.tablayout.addWidget(self.textEdit, 0, 0, 1, 1)
+
+        font = QtGui.QFont()
+        font.setFamily("Consolas")
+        font.setFixedPitch(True)
+        font.setPointSize(10)
         self.textEdit.setFont(font)
+        self.tabWidget.addTab(self.tab,"")
+	self.tabWidget.setCurrentIndex(0)
+
+#        self.tab_2 = QtGui.QWidget()
+#        self.tab_2.setObjectName("tab_2")
+
+#        self.tabWidget.addTab(self.tab_2,"")
+
 #        py_de.setCentralWidget(self.centralwidget)
-	py_de.setCentralWidget(self.textEdit)
+        py_de.setCentralWidget(self.tabWidget)
 
         self.menubar = QtGui.QMenuBar(py_de)
         self.menubar.setGeometry(QtCore.QRect(0,0,502,26))
@@ -209,6 +229,7 @@ class Ui_py_de(object):
         self.actionC.setText(QtGui.QApplication.translate("py_de", "C++ Implementation File (.cpp)", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPython_File.setText(QtGui.QApplication.translate("py_de", "Python File (.py)", None, QtGui.QApplication.UnicodeUTF8))
         self.actionC_Header_File_h.setText(QtGui.QApplication.translate("py_de", "C++ Header File (.h)", None, QtGui.QApplication.UnicodeUTF8))
+	self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("py_de", "Untitled 1", None, QtGui.QApplication.UnicodeUTF8))
 
    
     def template(self):
