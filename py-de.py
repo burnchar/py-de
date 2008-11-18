@@ -124,7 +124,7 @@ class Ui_py_de(object):
         self.actionQuit.setObjectName("actionQuit")
 
         self.actionBuild = QtGui.QAction(py_de)
-        self.actionBuild.setIcon(QtGui.QIcon("arrowBG.png"))
+        self.actionBuild.setIcon(QtGui.QIcon("icon_green_arrow.png"))
         self.actionBuild.setObjectName("actionBuild")
 
         self.actionBuild_All = QtGui.QAction(py_de)
