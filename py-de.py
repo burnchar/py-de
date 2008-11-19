@@ -1,15 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'menu.ui'
-#
-# Created: Mon Nov 10 17:36:56 2008
-#      by: PyQt4 UI code generator 4.3.3
-#
-# WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtGui import QFont
+from PyQt4.QtGui import QFont, QTextEdit, QCloseEvent, QFileDialog, QMenu
 
 class Ui_py_de(object):
     def setupUi(self, py_de):
@@ -27,7 +19,6 @@ class Ui_py_de(object):
 	self.tablayout = QtGui.QGridLayout(self.tab)
 
         self.textEdit = QtGui.QTextEdit(self.tab)
-#        self.textEdit.setGeometry(QtCore.QRect(100,90,321,221))
 
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Policy(1),QtGui.QSizePolicy.Policy(1))
         sizePolicy.setHorizontalStretch(0)
@@ -46,38 +37,10 @@ class Ui_py_de(object):
         self.centralwidget.addTab(self.tab,"")
 	self.centralwidget.setCurrentIndex(0)
 
-#        self.tab_2 = QtGui.QWidget()
-#        self.tab_2.setObjectName("tab_2")
-
-#        self.tabWidget.addTab(self.tab_2,"")
-
         py_de.setCentralWidget(self.centralwidget)
 
-        self.menubar = QtGui.QMenuBar(py_de)
-        self.menubar.setGeometry(QtCore.QRect(0,0,502,26))
-        self.menubar.setObjectName("menubar")
-
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName("menuFile")
-
-        self.menuNew = QtGui.QMenu(self.menuFile)
-        self.menuNew.setObjectName("menuNew")
-
-        self.menuEdit = QtGui.QMenu(self.menubar)
-        self.menuEdit.setObjectName("menuEdit")
-
-        self.menuBuild = QtGui.QMenu(self.menubar)
-        self.menuBuild.setObjectName("menuBuild")
-
-        self.menuTools = QtGui.QMenu(self.menubar)
-        self.menuTools.setObjectName("menuTools")
-
-        self.menuFormat = QtGui.QMenu(self.menuTools)
-        self.menuFormat.setObjectName("menuFormat")
-
-        self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setObjectName("menuHelp")
-        py_de.setMenuBar(self.menubar)
+	self.createMenus(py_de)
+	self.createActions(py_de)
 
         self.statusbar = QtGui.QStatusBar(py_de)
         self.statusbar.setObjectName("statusbar")
@@ -87,6 +50,23 @@ class Ui_py_de(object):
         self.toolBar.setObjectName("toolBar")
         py_de.addToolBar(QtCore.Qt.TopToolBarArea,self.toolBar)
 
+        self.toolBar.addAction(self.actionBuild)
+
+        self.retranslateUi(py_de)
+        QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
+        QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
+        QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
+        QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
+	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.template)
+	
+        QtCore.QMetaObject.connectSlotsByName(py_de)
+
+    def openFile(self):
+	print "bar"
+        fileName = QFileDialog.getOpenFileName()
+        loadFile(fileName)
+
+    def createActions(self, py_de):
         self.actionCopy = QtGui.QAction(py_de)
         self.actionCopy.setObjectName("actionCopy")
 
@@ -153,7 +133,7 @@ class Ui_py_de(object):
 
         self.actionC_Header_File_h = QtGui.QAction(py_de)
         self.actionC_Header_File_h.setObjectName("actionC_Header_File_h")
-	
+
         self.menuNew.addAction(self.actionC)
         self.menuNew.addAction(self.actionC_Header_File_h)
         self.menuNew.addAction(self.actionPython_File)
@@ -182,17 +162,33 @@ class Ui_py_de(object):
         self.menubar.addAction(self.menuBuild.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
-        self.toolBar.addAction(self.actionBuild)
 
-        self.retranslateUi(py_de)
-        QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
-        QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
-        QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
-        QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
-	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.template)
-	
-        QtCore.QMetaObject.connectSlotsByName(py_de)
+    def createMenus(self, py_de):
+	self.menubar = QtGui.QMenuBar(py_de)
+        self.menubar.setGeometry(QtCore.QRect(0,0,502,26))
+        self.menubar.setObjectName("menubar")
 
+        self.menuFile = QtGui.QMenu(self.menubar)
+        self.menuFile.setObjectName("menuFile")
+
+        self.menuNew = QtGui.QMenu(self.menuFile)
+        self.menuNew.setObjectName("menuNew")
+
+        self.menuEdit = QtGui.QMenu(self.menubar)
+        self.menuEdit.setObjectName("menuEdit")
+
+        self.menuBuild = QtGui.QMenu(self.menubar)
+        self.menuBuild.setObjectName("menuBuild")
+
+        self.menuTools = QtGui.QMenu(self.menubar)
+        self.menuTools.setObjectName("menuTools")
+
+        self.menuFormat = QtGui.QMenu(self.menuTools)
+        self.menuFormat.setObjectName("menuFormat")
+
+        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
+        py_de.setMenuBar(self.menubar)
 
     def retranslateUi(self, py_de):
         py_de.setWindowTitle(QtGui.QApplication.translate("py_de", "py_de", None, QtGui.QApplication.UnicodeUTF8))
@@ -262,3 +258,4 @@ if __name__ == "__main__":
     ui.setupUi(py_de)
     py_de.show()
     sys.exit(app.exec_())
+
