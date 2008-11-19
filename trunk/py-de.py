@@ -29,11 +29,13 @@ class Ui_py_de(object):
 
 	self.tablayout.addWidget(self.textEdit, 0, 0, 1, 1)
 
+	#Set font to use for textEdit
         font = QtGui.QFont()
         font.setFamily("Consolas")
         font.setFixedPitch(True)
         font.setPointSize(10)
         self.textEdit.setFont(font)
+
         self.centralwidget.addTab(self.tab,"")
 	self.centralwidget.setCurrentIndex(0)
 
@@ -41,24 +43,15 @@ class Ui_py_de(object):
 
 	self.createMenus(py_de)
 	self.createActions(py_de)
-
-        self.statusbar = QtGui.QStatusBar(py_de)
-        self.statusbar.setObjectName("statusbar")
-        py_de.setStatusBar(self.statusbar)
-
-        self.toolBar = QtGui.QToolBar(py_de)
-        self.toolBar.setObjectName("toolBar")
-        py_de.addToolBar(QtCore.Qt.TopToolBarArea,self.toolBar)
-
-        self.toolBar.addAction(self.actionBuild)
+        self.createToolBar(py_de)
 
         self.retranslateUi(py_de)
+
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
         QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
 	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.template)
-	
         QtCore.QMetaObject.connectSlotsByName(py_de)
 
     def openFile(self):
@@ -162,6 +155,14 @@ class Ui_py_de(object):
         self.menubar.addAction(self.menuBuild.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
+
+    def createToolBar(self, py_de):
+        self.toolBar = QtGui.QToolBar(py_de)
+        self.toolBar.setObjectName("toolBar")
+        py_de.addToolBar(QtCore.Qt.TopToolBarArea,self.toolBar)
+
+        self.toolBar.addAction(self.actionBuild)
+
 
     def createMenus(self, py_de):
 	self.menubar = QtGui.QMenuBar(py_de)
