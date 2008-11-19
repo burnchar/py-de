@@ -50,6 +50,7 @@ class Ui_py_de(object):
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
         QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
+        QtCore.QObject.connect(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
         QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
 	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.template)
         QtCore.QMetaObject.connectSlotsByName(py_de)
@@ -61,70 +62,95 @@ class Ui_py_de(object):
 
     def createActions(self, py_de):
         self.actionCopy = QtGui.QAction(py_de)
+        self.actionCopy.setIcon(QtGui.QIcon("images/edit-copy.png"))
         self.actionCopy.setObjectName("actionCopy")
 
+        self.actionCut = QtGui.QAction(py_de)
+        self.actionCut.setIcon(QtGui.QIcon("images/edit-cut.png"))
+        self.actionCut.setObjectName("actionCut")
+
         self.actionPaste = QtGui.QAction(py_de)
+        self.actionPaste.setIcon(QtGui.QIcon("images/edit-paste.png"))
         self.actionPaste.setObjectName("actionPaste")
 
         self.actionSelect_All = QtGui.QAction(py_de)
+        self.actionSelect_All.setIcon(QtGui.QIcon("images/edit-select-all.png"))
         self.actionSelect_All.setObjectName("actionSelect_All")
 
         self.actionFind = QtGui.QAction(py_de)
+        self.actionFind.setIcon(QtGui.QIcon("images/edit-find.png"))
         self.actionFind.setObjectName("actionFind")
 
         self.actionReplace = QtGui.QAction(py_de)
+        self.actionReplace.setIcon(QtGui.QIcon("images/PLACEHOLDER.jpg"))
         self.actionReplace.setObjectName("actionReplace")
 
         self.actionGo_To_Line = QtGui.QAction(py_de)
+        self.actionGo_To_Line.setIcon(QtGui.QIcon("images/PLACEHOLDER.jpg"))
         self.actionGo_To_Line.setObjectName("actionGo_To_Line")
 
         self.actionOpen = QtGui.QAction(py_de)
+        self.actionOpen.setIcon(QtGui.QIcon("images/document-open.png"))
         self.actionOpen.setObjectName("actionOpen")
 
         self.actionSave = QtGui.QAction(py_de)
+        self.actionSave.setIcon(QtGui.QIcon("images/document-save.png"))
         self.actionSave.setObjectName("actionSave")
 
         self.actionSave_As = QtGui.QAction(py_de)
+        self.actionSave_As.setIcon(QtGui.QIcon("images/document-save-as.png"))
         self.actionSave_As.setObjectName("actionSave_As")
 
         self.actionPrint = QtGui.QAction(py_de)
+        self.actionPrint.setIcon(QtGui.QIcon("images/document-print.png"))
         self.actionPrint.setObjectName("actionPrint")
 
         self.actionClose = QtGui.QAction(py_de)
+        self.actionClose.setIcon(QtGui.QIcon("images/dialog-close.png"))
         self.actionClose.setObjectName("actionClose")
 
         self.actionQuit = QtGui.QAction(py_de)
+        self.actionQuit.setIcon(QtGui.QIcon("images/application-exit.png"))
         self.actionQuit.setObjectName("actionQuit")
 
         self.actionBuild = QtGui.QAction(py_de)
-        self.actionBuild.setIcon(QtGui.QIcon("icon_green_arrow.png"))
+        self.actionBuild.setIcon(QtGui.QIcon("images/run-build-file.png"))
         self.actionBuild.setObjectName("actionBuild")
 
         self.actionBuild_All = QtGui.QAction(py_de)
+        self.actionBuild_All.setIcon(QtGui.QIcon("images/run-build.png"))
         self.actionBuild_All.setObjectName("actionBuild_All")
 
         self.actionRun = QtGui.QAction(py_de)
+        self.actionRun.setIcon(QtGui.QIcon("images/arrow-right.png"))
         self.actionRun.setObjectName("actionRun")
 
         self.actionClean = QtGui.QAction(py_de)
+        self.actionClean.setIcon(QtGui.QIcon("images/edit-clear.png"))
         self.actionClean.setObjectName("actionClean")
 
         self.actionAbout = QtGui.QAction(py_de)
+        self.actionAbout.setIcon(QtGui.QIcon("images/help-about.png"))
         self.actionAbout.setObjectName("actionAbout")
 
         self.actionSelect_Language = QtGui.QAction(py_de)
+        self.actionSelect_Language.setIcon(QtGui.QIcon("images/PLACEHOLDER.jpg"))
         self.actionSelect_Language.setObjectName("actionSelect_Language")
 
         self.actionFortran = QtGui.QAction(py_de)
+        self.actionFortran.setIcon(QtGui.QIcon("images/file-fortran.png"))
         self.actionFortran.setObjectName("actionFortran")
 
         self.actionC = QtGui.QAction(py_de)
+        self.actionC.setIcon(QtGui.QIcon("images/file-cpp.png"))
         self.actionC.setObjectName("actionC")
 
         self.actionPython_File = QtGui.QAction(py_de)
+        self.actionPython_File.setIcon(QtGui.QIcon("images/file-python.png"))
         self.actionPython_File.setObjectName("actionPython_File")
 
         self.actionC_Header_File_h = QtGui.QAction(py_de)
+#        self.actionC_Header.setIcon(QtGui.QIcon("images/file-header.png"))
         self.actionC_Header_File_h.setObjectName("actionC_Header_File_h")
 
         self.menuNew.addAction(self.actionC)
@@ -135,10 +161,11 @@ class Ui_py_de(object):
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_As)
-        self.menuFile.addAction(self.actionPrint)
         self.menuFile.addAction(self.actionClose)
+        self.menuFile.addAction(self.actionPrint)
         self.menuFile.addAction(self.actionQuit)
         self.menuEdit.addAction(self.actionCopy)
+        self.menuEdit.addAction(self.actionCut)
         self.menuEdit.addAction(self.actionPaste)
         self.menuEdit.addAction(self.actionSelect_All)
         self.menuEdit.addAction(self.actionFind)
@@ -202,6 +229,7 @@ class Ui_py_de(object):
         self.menuHelp.setTitle(QtGui.QApplication.translate("py_de", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.toolBar.setWindowTitle(QtGui.QApplication.translate("py_de", "py_de", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCopy.setText(QtGui.QApplication.translate("py_de", "Copy", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionCut.setText(QtGui.QApplication.translate("py_de", "Cut", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPaste.setText(QtGui.QApplication.translate("py_de", "Paste", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSelect_All.setText(QtGui.QApplication.translate("py_de", "Select All", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFind.setText(QtGui.QApplication.translate("py_de", "Find", None, QtGui.QApplication.UnicodeUTF8))
@@ -211,13 +239,13 @@ class Ui_py_de(object):
         self.actionSave.setText(QtGui.QApplication.translate("py_de", "Save", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_As.setText(QtGui.QApplication.translate("py_de", "Save As", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPrint.setText(QtGui.QApplication.translate("py_de", "Print", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionClose.setText(QtGui.QApplication.translate("py_de", "Close", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit.setText(QtGui.QApplication.translate("py_de", "Quit", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionClose.setText(QtGui.QApplication.translate("py_de", "Close file", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionQuit.setText(QtGui.QApplication.translate("py_de", "Quit Py-DE", None, QtGui.QApplication.UnicodeUTF8))
         self.actionBuild.setText(QtGui.QApplication.translate("py_de", "Build", None, QtGui.QApplication.UnicodeUTF8))
         self.actionBuild_All.setText(QtGui.QApplication.translate("py_de", "Build All", None, QtGui.QApplication.UnicodeUTF8))
         self.actionRun.setText(QtGui.QApplication.translate("py_de", "Run", None, QtGui.QApplication.UnicodeUTF8))
         self.actionClean.setText(QtGui.QApplication.translate("py_de", "Clean", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAbout.setText(QtGui.QApplication.translate("py_de", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAbout.setText(QtGui.QApplication.translate("py_de", "About Py-DE", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSelect_Language.setText(QtGui.QApplication.translate("py_de", "Select Language", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFortran.setText(QtGui.QApplication.translate("py_de", "Fortran File (.f)", None, QtGui.QApplication.UnicodeUTF8))
         self.actionC.setText(QtGui.QApplication.translate("py_de", "C++ Implementation File (.cpp)", None, QtGui.QApplication.UnicodeUTF8))
