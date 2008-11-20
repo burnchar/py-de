@@ -107,6 +107,8 @@ class Ui_py_de(object):
 
         self.retranslateUi(py_de)
 
+#	self.createTab(py_de)
+
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
         QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile) 
         QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
@@ -115,6 +117,50 @@ class Ui_py_de(object):
         QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
 	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.template)
         QtCore.QMetaObject.connectSlotsByName(py_de)
+
+    def createTab(self, py_de):
+        newTabName = "tab" + str(self.centralwidget.count())
+	newTextEditName = "textEdit" + str(self.centralwidget.count())
+        print "createTab(): creating tab %s" % (newTabName)
+        self.tab = QtGui.QWidget()
+        self.tab.setObjectName(newTabName)
+        self.tablayout = QtGui.QGridLayout(self.tab)
+        self.centralwidget.addTab(self.tab,"")
+        newTabIndex = self.centralwidget.indexOf(self.tab)
+        newTabTitle = "Untitled " + str((newTabIndex + 1))
+        self.centralwidget.setCurrentIndex(self.centralwidget.indexOf(self.tab))
+        self.centralwidget.setTabText(newTabIndex, QtGui.QApplication.translate("py_de", newTabTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.textEdit = QsciScintilla(self.tab)
+        font = QtGui.QFont()
+        font.setFamily("Consolas")
+        font.setFixedPitch(True)
+        font.setPointSize(10)
+        fm = QtGui.QFontMetrics(font)
+        self.textEdit.setFont(font)
+        self.textEdit.setMarginsFont(font)
+        self.textEdit.setMarginWidth(0, fm.width( "00000" ) + 5)
+        self.textEdit.setMarginLineNumbers(0, True)
+        self.textEdit.setEdgeMode(QsciScintilla.EdgeLine)
+        self.textEdit.setEdgeColumn(80)
+        self.textEdit.setEdgeColor(QtGui.QColor("#FF0000"))
+        self.textEdit.setFolding(QsciScintilla.BoxedTreeFoldStyle)
+        self.textEdit.setBraceMatching(QsciScintilla.SloppyBraceMatch)
+        self.textEdit.setCaretLineVisible(True)
+        self.textEdit.setCaretLineBackgroundColor(QtGui.QColor("#CDA869"))
+        self.textEdit.setMarginsBackgroundColor(QtGui.QColor("#333333"))
+        self.textEdit.setMarginsForegroundColor(QtGui.QColor("#CCCCCC"))
+        self.textEdit.setFoldMarginColors(QtGui.QColor("#99CC66"),QtGui.QColor("#333300"))
+        lexer = QsciLexerPython()
+        lexer.setDefaultFont(font)
+        self.textEdit.setLexer(lexer)
+        self.textEdit.show()
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Policy(1),QtGui.QSizePolicy.Policy(1))
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
+        self.textEdit.setSizePolicy(sizePolicy)
+        self.textEdit.setObjectName(newTextEditName)
+        self.tablayout.addWidget(self.textEdit, 0, 0, 1, 1)
 
     def openFile(self):
         fileName = QFileDialog.getOpenFileName()
@@ -211,7 +257,6 @@ class Ui_py_de(object):
         self.actionPython_File.setObjectName("actionPython_File")
 
         self.actionC_Header_File_h = QtGui.QAction(py_de)
-        self.actionC_Header_File_h.setIcon(QtGui.QIcon("images/file-header.png"))
         self.actionC_Header_File_h.setObjectName("actionC_Header_File_h")
 
         self.menuNew.addAction(self.actionC)
@@ -323,7 +368,7 @@ class Ui_py_de(object):
       # 4. Load tempplate selected and copy it on the self.textEdit
       
       # Upgrade: in tools menu, add some functionalities for templates (add/remove template...) - 
-      
+     
       templates  = QtCore.QStringList()
       templates.append("Empty")
       templates.append("Hello World")
