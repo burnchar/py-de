@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, QtCore
 from PyQt4.QtGui import QFont, QTextEdit, QCloseEvent, QFileDialog, QMenu
+from PyQt4.Qsci import QsciScintilla, QsciScintillaBase, QsciLexerPython
 
 class Ui_py_de(object):
     def setupUi(self, py_de):
@@ -18,8 +19,67 @@ class Ui_py_de(object):
 
 	self.tablayout = QtGui.QGridLayout(self.tab)
 
-        self.textEdit = QtGui.QTextEdit(self.tab)
+        self.textEdit = QsciScintilla(self.tab)
+        #####################################
+        ### Set the sytnax highlighting.
+        #####################################
+        
+        ## define the font to use
+        font = QtGui.QFont()
+        font.setFamily("Consolas")
+        font.setFixedPitch(True)
+        font.setPointSize(10)
+        # the font metrics here will help
+        # building the margin width later
+        fm = QtGui.QFontMetrics(font)
 
+        ## set the default font of the editor
+        ## and take the same font for line numbers
+        self.textEdit.setFont(font)
+        self.textEdit.setMarginsFont(font)
+
+        ## Line numbers
+        # conventionnaly, margin 0 is for line numbers
+        self.textEdit.setMarginWidth(0, fm.width( "00000" ) + 5)
+        self.textEdit.setMarginLineNumbers(0, True)
+
+        ## Edge Mode shows a red vetical bar at 80 chars
+        self.textEdit.setEdgeMode(QsciScintilla.EdgeLine)
+        self.textEdit.setEdgeColumn(80)
+        self.textEdit.setEdgeColor(QtGui.QColor("#FF0000"))
+        
+        ## Folding visual : we will use boxes
+        self.textEdit.setFolding(QsciScintilla.BoxedTreeFoldStyle)
+        
+        ## Braces matching
+        self.textEdit.setBraceMatching(QsciScintilla.SloppyBraceMatch)
+        
+        ## Editing line color
+        self.textEdit.setCaretLineVisible(True)
+        self.textEdit.setCaretLineBackgroundColor(QtGui.QColor("#CDA869"))
+        
+        ## Margins colors
+        # line numbers margin
+        self.textEdit.setMarginsBackgroundColor(QtGui.QColor("#333333"))
+        self.textEdit.setMarginsForegroundColor(QtGui.QColor("#CCCCCC"))
+        
+        # folding margin colors (foreground,background)
+        self.textEdit.setFoldMarginColors(QtGui.QColor("#99CC66"),QtGui.QColor("#333300"))
+        
+        ## Choose a lexer
+        lexer = QsciLexerPython()
+        lexer.setDefaultFont(font)
+        self.textEdit.setLexer(lexer)
+        
+        ## Render on screen
+        self.textEdit.show()
+        
+        ## Show this file in the self.textEdit
+
+        #####################################
+        ## end of syntax highlighting.  
+        #####################################
+        
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Policy(1),QtGui.QSizePolicy.Policy(1))
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
