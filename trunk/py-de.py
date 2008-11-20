@@ -121,7 +121,8 @@ class Ui_py_de(object):
 #	self.createTab(py_de)
 
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
-        QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile) 
+        QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile)
+        QtCore.QObject.connect(self.actionSave,QtCore.SIGNAL("activated()"),self.saveFile) 
         QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         QtCore.QObject.connect(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
@@ -179,8 +180,12 @@ class Ui_py_de(object):
 
     def openFile(self):
         fileName = QFileDialog.getOpenFileName()
-#        myText = open(fileName)
 	self.textEdit.setText(open(fileName).read())
+
+    def saveFile(self):
+        fileName = QFileDialog.getSaveFileName()
+	f = open(fileName, "w")
+	f.write(self.textEdit.text())
 
 	####################################
         ## Function for adding actions to 
