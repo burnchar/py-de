@@ -7,7 +7,7 @@ from PyQt4.Qsci import QsciScintilla, QsciScintillaBase, QsciLexerPython
 class Ui_py_de(object):
     def setupUi(self, py_de):
         py_de.setObjectName("py_de")
-        py_de.resize(QtCore.QSize(QtCore.QRect(0,0,502,499).size()).expandedTo(py_de.minimumSizeHint()))
+        py_de.resize(QtCore.QSize(QtCore.QRect(0,0,800,570).size()).expandedTo(py_de.minimumSizeHint()))
 
         self.centralwidget = QtGui.QTabWidget(py_de)
         self.centralwidget.setObjectName("centralwidget")
