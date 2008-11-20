@@ -211,8 +211,7 @@ class Ui_py_de(object):
         self.actionPython_File.setObjectName("actionPython_File")
 
         self.actionC_Header_File_h = QtGui.QAction(py_de)
-#        
-self.actionC_Header.setIcon(QtGui.QIcon("images/file-header.png"))
+#        self.actionC_Header.setIcon(QtGui.QIcon("images/file-header.png"))
         self.actionC_Header_File_h.setObjectName("actionC_Header_File_h")
 
         self.menuNew.addAction(self.actionC)
