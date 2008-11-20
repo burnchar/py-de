@@ -6,6 +6,11 @@ from PyQt4.Qsci import QsciScintilla, QsciScintillaBase, QsciLexerPython
 
 class Ui_py_de(object):
     def setupUi(self, py_de):
+
+	####################################
+	## Set up our initial window object
+	####################################
+
         py_de.setObjectName("py_de")
         py_de.resize(QtCore.QSize(QtCore.QRect(0,0,800,570).size()).expandedTo(py_de.minimumSizeHint()))
 
@@ -14,12 +19,21 @@ class Ui_py_de(object):
 
         self.centralwidget.setGeometry(QtCore.QRect(50,50,200,200))
 
+	####################################
+        ## Set up tabs
+        ####################################
+
         self.tab = QtGui.QWidget()
         self.tab.setObjectName("tab")
 
 	self.tablayout = QtGui.QGridLayout(self.tab)
 
+	####################################
+        ## The actual text box.
+        ####################################
+	
         self.textEdit = QsciScintilla(self.tab)
+
         #####################################
         ### Set the sytnax highlighting.
         #####################################
@@ -80,6 +94,10 @@ class Ui_py_de(object):
         ## end of syntax highlighting.  
         #####################################
         
+	####################################
+        ## Set up the sizes of everything
+        ####################################
+	
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Policy(1),QtGui.QSizePolicy.Policy(1))
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -88,13 +106,6 @@ class Ui_py_de(object):
         self.textEdit.setObjectName("textEdit")
 
 	self.tablayout.addWidget(self.textEdit, 0, 0, 1, 1)
-
-	#Set font to use for textEdit
-        font = QtGui.QFont()
-        font.setFamily("Consolas")
-        font.setFixedPitch(True)
-        font.setPointSize(10)
-        self.textEdit.setFont(font)
 
         self.centralwidget.addTab(self.tab,"")
 	self.centralwidget.setCurrentIndex(0)
@@ -117,6 +128,10 @@ class Ui_py_de(object):
         QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
 	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.template)
         QtCore.QMetaObject.connectSlotsByName(py_de)
+
+	 ####################################
+        ## Method for creating a tab
+        ####################################
 
     def createTab(self, py_de):
         newTabName = "tab" + str(self.centralwidget.count())
@@ -166,6 +181,11 @@ class Ui_py_de(object):
         fileName = QFileDialog.getOpenFileName()
 #        myText = open(fileName)
 	self.textEdit.setText(open(fileName).read())
+
+	####################################
+        ## Function for adding actions to 
+	## various menu items.
+        ####################################
 
     def createActions(self, py_de):
         self.actionCopy = QtGui.QAction(py_de)
@@ -289,6 +309,10 @@ class Ui_py_de(object):
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
+	####################################
+        ## Method for creating a toolbar
+        ####################################
+
     def createToolBar(self, py_de):
         self.toolBar = QtGui.QToolBar(py_de)
         self.toolBar.setObjectName("toolBar")
@@ -296,6 +320,10 @@ class Ui_py_de(object):
 
         self.toolBar.addAction(self.actionBuild)
 
+
+	####################################
+        ## Method for creating menus
+        ####################################
 
     def createMenus(self, py_de):
 	self.menubar = QtGui.QMenuBar(py_de)
@@ -376,7 +404,6 @@ class Ui_py_de(object):
            QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8), 
 	   QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8), 
 	   templates)
-
 
 if __name__ == "__main__":
     import sys
