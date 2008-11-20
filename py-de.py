@@ -108,6 +108,7 @@ class Ui_py_de(object):
         self.retranslateUi(py_de)
 
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
+        QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile) 
         QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         QtCore.QObject.connect(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
@@ -116,9 +117,9 @@ class Ui_py_de(object):
         QtCore.QMetaObject.connectSlotsByName(py_de)
 
     def openFile(self):
-	print "bar"
         fileName = QFileDialog.getOpenFileName()
-        loadFile(fileName)
+#        myText = open(fileName)
+	self.textEdit.setText(open(fileName).read())
 
     def createActions(self, py_de):
         self.actionCopy = QtGui.QAction(py_de)
