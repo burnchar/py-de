@@ -3,6 +3,7 @@
 from PyQt4 import QtCore, QtGui, QtCore
 from PyQt4.QtGui import QFont, QTextEdit, QCloseEvent, QFileDialog, QMenu
 from PyQt4.Qsci import QsciScintilla, QsciScintillaBase, QsciLexerPython
+import pydeTemplates
 
 class Ui_py_de(object):
     def setupUi(self, py_de):
@@ -127,7 +128,10 @@ class Ui_py_de(object):
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         QtCore.QObject.connect(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
         QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
-	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.template)
+	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
+	QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
+	QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
+	
         QtCore.QMetaObject.connectSlotsByName(py_de)
 
 	 ####################################
@@ -397,22 +401,23 @@ class Ui_py_de(object):
 	self.centralwidget.setTabText(self.centralwidget.indexOf(self.tab), QtGui.QApplication.translate("py_de", "Untitled 1", None, QtGui.QApplication.UnicodeUTF8))
 
    
-    def template(self):
-      #-------Test-------------------------------------------------------------------------------------
-      # 1. Detect language selected
-      # 2. If templates are associated to this language show pop up window
-      # 3. Load list of templates  and display them in a list + option "empty file"
-      # 4. Load tempplate selected and copy it on the self.textEdit
-      
+    def template(self, language):
       # Upgrade: in tools menu, add some functionalities for templates (add/remove template...) - 
-     
-      templates  = QtCore.QStringList()
-      templates.append("Empty")
-      templates.append("Hello World")
-      QtGui.QInputDialog.getItem(self.centralwidget, 
+      
+      #load list of templates for language selected
+      o = pydeTemplates.pydeTemplates("templates")
+      templates  = QtCore.QStringList(o.getTemplatesListOf(language))
+      templates.prepend("Empty")
+      
+      #display dialogbox with a listbox containing list of templates
+      template, res = QtGui.QInputDialog.getItem(self.centralwidget, 
            QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8), 
 	   QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8), 
-	   templates)
+	   templates)  
+      if res:
+	#load template in the editor      
+	self.textEdit.setText(o.loadTemplates(language, template))
+	
 
 if __name__ == "__main__":
     import sys
