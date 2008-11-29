@@ -191,6 +191,16 @@ class Ui_py_de(object):
 	f = open(fileName, "w")
 	f.write(self.textEdit.text())
 
+    def cut(self):
+        QKeySequence(self.trUtf8("Ctrl+X", "Edit|Cut"))
+
+    def copy(self):
+        QKeySequence(self.trUtf8("Ctrl+C", "Edit|Copy"))
+
+    def paste(self):
+        QKeySequence(self.trUtf8("Ctrl+V", "Edit|Paste"))
+
+
 	####################################
         ## Function for adding actions to 
 	## various menu items.
