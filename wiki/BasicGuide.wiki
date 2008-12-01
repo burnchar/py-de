@@ -1,15 +1,12 @@
 This is a guide to explain how to use the menu.
 
+
 = Introduction =
 
 Here are the details of use for the simple IDE.
 
-= Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Details =
 
 ==Add File==
 There are 3 languages which are supported in this IDE: Python, C++, and Fortran. To add a new file... Select File > New > Then pick the type of file you would like to add. A new tab will appear with the file extension associated with the type of file you selected.
