@@ -128,13 +128,13 @@ class Ui_py_de(object):
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         QtCore.QObject.connect(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
         QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
-	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
-	QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
-	QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
 	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.newPythonFile)
 	QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),self.newCFile)
 	QtCore.QObject.connect(self.actionC_Header_File_h,QtCore.SIGNAL("activated()"),self.newCHeaderFile)
 	QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),self.newFortranFile)
+	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
+	QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
+	QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
 	
         QtCore.QMetaObject.connectSlotsByName(py_de)
 
