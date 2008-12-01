@@ -121,9 +121,11 @@ class Ui_py_de(object):
 
 	#self.createTab(py_de)
 
+        QtCore.QObject.connect(self.actionClose,QtCore.SIGNAL("activated()"),self.closeTab)
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
         QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile)
         QtCore.QObject.connect(self.actionSave,QtCore.SIGNAL("activated()"),self.saveFile) 
+        QtCore.QObject.connect(self.actionSave_As,QtCore.SIGNAL("activated()"),self.saveAsFile)
         QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         QtCore.QObject.connect(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
@@ -142,7 +144,7 @@ class Ui_py_de(object):
         ## Method for creating a tab
         ####################################
 
-    def createTab(self, py_de, ext):
+    def createTab(self, py_de, ext, filename=""):
         newTabName = "tab" + str(self.centralwidget.count())
 	newTextEditName = "textEdit" + str(self.centralwidget.count())
         print "createTab(): creating tab %s" % (newTabName)
@@ -151,7 +153,9 @@ class Ui_py_de(object):
         self.tablayout = QtGui.QGridLayout(self.tab)
         self.centralwidget.addTab(self.tab,"")
         newTabIndex = self.centralwidget.indexOf(self.tab)
-        newTabTitle = "Untitled" + str((newTabIndex + 1)) + ext
+	if filename == "":
+	    filename = "Untitled" + str((newTabIndex + 1))	
+	newTabTitle = str(filename) + str(ext)
         self.centralwidget.setCurrentIndex(self.centralwidget.indexOf(self.tab))
         self.centralwidget.setTabText(newTabIndex, QtGui.QApplication.translate("py_de", newTabTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.textEdit = QsciScintilla(self.tab)
@@ -186,8 +190,18 @@ class Ui_py_de(object):
         self.textEdit.setObjectName(newTextEditName)
         self.tablayout.addWidget(self.textEdit, 0, 0, 1, 1)
 
+
+	#####################################
+	## Functions for menu button actions
+	#####################################
+
     def openFile(self):
         fileName = QFileDialog.getOpenFileName()
+	print fileName
+	index = fileName.lastIndexOf("/")
+	newFileName = fileName[index+1:]
+	print newFileName
+	self.createTab(py_de, "", newFileName)
 	self.textEdit.setText(open(fileName).read())
 
     def saveFile(self):
@@ -195,17 +209,20 @@ class Ui_py_de(object):
 	f = open(fileName, "w")
 	f.write(self.textEdit.text())
 
+    def saveAsFile(self):
+        QKeySequence(self.textEdit.trUtf8("Ctrl+Shft+S", "File|Save As"))
+
     def cut(self):
-        QKeySequence(self.trUtf8("Ctrl+X", "Edit|Cut"))
+        QKeySequence(self.textEdit.trUtf8("Ctrl+X", "Edit|Cut"))
 
     def copy(self):
-        QKeySequence(self.trUtf8("Ctrl+C", "Edit|Copy"))
+        QKeySequence(self.textEdit.trUtf8("Ctrl+C", "Edit|Copy"))
 
     def paste(self):
-        QKeySequence(self.trUtf8("Ctrl+V", "Edit|Paste"))
+        QKeySequence(self.textEdit.trUtf8("Ctrl+V", "Edit|Paste"))
 
     def find(self):
-        QKeySequence(self.trUtf8("Ctrl+F", "Edit|Find"))
+        QKeySequence(self.textEdit.trUtf8("Ctrl+F", "Edit|Find"))
 
     def newPythonFile(self):
 	ext = ".py"
@@ -222,6 +239,9 @@ class Ui_py_de(object):
     def newFortranFile(self):
 	ext = ".f"
 	self.createTab(py_de, ext)
+
+    def closeTab(self):
+        QKeySequence(self.textEdit.trUtf8("Ctrl+W", "File|Close file"))
 
 	####################################
         ## Function for adding actions to 
