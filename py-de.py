@@ -87,8 +87,8 @@ class Ui_py_de(object):
         self.textEdit.setLexer(lexer)
         
         ## Render on screen
-        self.textEdit.show()
-        
+        self.textEdit.show()      
+
         ## Show this file in the self.textEdit
 
         #####################################
@@ -119,7 +119,7 @@ class Ui_py_de(object):
 
         self.retranslateUi(py_de)
 
-#	self.createTab(py_de)
+	#self.createTab(py_de)
 
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
         QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile)
@@ -131,6 +131,10 @@ class Ui_py_de(object):
 	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
 	QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
 	QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
+	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.newPythonFile)
+	QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),self.newCFile)
+	QtCore.QObject.connect(self.actionC_Header_File_h,QtCore.SIGNAL("activated()"),self.newCHeaderFile)
+	QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),self.newFortranFile)
 	
         QtCore.QMetaObject.connectSlotsByName(py_de)
 
@@ -138,7 +142,7 @@ class Ui_py_de(object):
         ## Method for creating a tab
         ####################################
 
-    def createTab(self, py_de):
+    def createTab(self, py_de, ext):
         newTabName = "tab" + str(self.centralwidget.count())
 	newTextEditName = "textEdit" + str(self.centralwidget.count())
         print "createTab(): creating tab %s" % (newTabName)
@@ -147,7 +151,7 @@ class Ui_py_de(object):
         self.tablayout = QtGui.QGridLayout(self.tab)
         self.centralwidget.addTab(self.tab,"")
         newTabIndex = self.centralwidget.indexOf(self.tab)
-        newTabTitle = "Untitled " + str((newTabIndex + 1))
+        newTabTitle = "Untitled" + str((newTabIndex + 1)) + ext
         self.centralwidget.setCurrentIndex(self.centralwidget.indexOf(self.tab))
         self.centralwidget.setTabText(newTabIndex, QtGui.QApplication.translate("py_de", newTabTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.textEdit = QsciScintilla(self.tab)
@@ -200,6 +204,24 @@ class Ui_py_de(object):
     def paste(self):
         QKeySequence(self.trUtf8("Ctrl+V", "Edit|Paste"))
 
+    def find(self):
+        QKeySequence(self.trUtf8("Ctrl+F", "Edit|Find"))
+
+    def newPythonFile(self):
+	ext = ".py"
+	self.createTab(py_de, ext)
+
+    def newCFile(self):
+	ext = ".cpp"
+	self.createTab(py_de, ext)
+
+    def newCHeaderFile(self):
+	ext = ".h"
+	self.createTab(py_de, ext)
+
+    def newFortranFile(self):
+	ext = ".f"
+	self.createTab(py_de, ext)
 
 	####################################
         ## Function for adding actions to 
