@@ -8,9 +8,9 @@ import pydeTemplates
 class Ui_py_de(object):
     def setupUi(self, py_de):
 
-	####################################
-	## Set up our initial window object
-	####################################
+        ####################################
+        ## Set up our initial window object 
+        ####################################
 
         py_de.setObjectName("py_de")
         py_de.resize(QtCore.QSize(QtCore.QRect(0,0,800,570).size()).expandedTo(py_de.minimumSizeHint()))
@@ -20,16 +20,16 @@ class Ui_py_de(object):
 
         self.centralwidget.setGeometry(QtCore.QRect(50,50,200,200))
 
-	####################################
-        ## Set up tabs
-        ####################################
+	    ####################################
+       	## Set up tabs
+       	####################################
 
         self.tab = QtGui.QWidget()
         self.tab.setObjectName("tab")
 
-	self.tablayout = QtGui.QGridLayout(self.tab)
+        self.tablayout = QtGui.QGridLayout(self.tab)
 
-	####################################
+	    ####################################
         ## The actual text box.
         ####################################
 	
@@ -62,7 +62,7 @@ class Ui_py_de(object):
         self.textEdit.setEdgeMode(QsciScintilla.EdgeLine)
         self.textEdit.setEdgeColumn(80)
         self.textEdit.setEdgeColor(QtGui.QColor("#FF0000"))
-        
+            
         ## Folding visual : we will use boxes
         self.textEdit.setFolding(QsciScintilla.BoxedTreeFoldStyle)
         
@@ -95,7 +95,7 @@ class Ui_py_de(object):
         ## end of syntax highlighting.  
         #####################################
         
-	####################################
+	    ####################################
         ## Set up the sizes of everything
         ####################################
 	
@@ -106,22 +106,22 @@ class Ui_py_de(object):
         self.textEdit.setSizePolicy(sizePolicy)
         self.textEdit.setObjectName("textEdit")
 
-	self.tablayout.addWidget(self.textEdit, 0, 0, 1, 1)
+        self.tablayout.addWidget(self.textEdit, 0, 0, 1, 1)
 
         self.centralwidget.addTab(self.tab,"")
-	self.centralwidget.setCurrentIndex(0)
+        self.centralwidget.setCurrentIndex(0)
 
         py_de.setCentralWidget(self.centralwidget)
 
-	self.createMenus(py_de)
-	self.createActions(py_de)
+        self.createMenus(py_de)
+        self.createActions(py_de)
         self.createToolBar(py_de)
 
         self.retranslateUi(py_de)
 
-	#self.createTab(py_de)
+        #self.createTab(py_de)
 
-        QtCore.QObject.connect(self.actionClose,QtCore.SIGNAL("activated()"),self.closeTab)
+        QtCore.QObject.connect(self.actionClose,QtCore.SIGNAL("triggered()"),self.closeTab)
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
         QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile)
         QtCore.QObject.connect(self.actionSave,QtCore.SIGNAL("activated()"),self.saveFile) 
@@ -130,32 +130,33 @@ class Ui_py_de(object):
         QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         QtCore.QObject.connect(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
         QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
-	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.newPythonFile)
-	QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),self.newCFile)
-	QtCore.QObject.connect(self.actionC_Header_File_h,QtCore.SIGNAL("activated()"),self.newCHeaderFile)
-	QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),self.newFortranFile)
-	QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
-	QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
-	QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
-	
+        QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.newPythonFile)
+        QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),self.newCFile)
+        QtCore.QObject.connect(self.actionC_Header_File_h,QtCore.SIGNAL("activated()"),self.newCHeaderFile)
+        QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),self.newFortranFile)
+        QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
+        QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
+        QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
+
         QtCore.QMetaObject.connectSlotsByName(py_de)
 
-	 ####################################
+
+	    ####################################
         ## Method for creating a tab
         ####################################
 
     def createTab(self, py_de, ext, filename=""):
         newTabName = "tab" + str(self.centralwidget.count())
-	newTextEditName = "textEdit" + str(self.centralwidget.count())
+        newTextEditName = "textEdit" + str(self.centralwidget.count())
         print "createTab(): creating tab %s" % (newTabName)
         self.tab = QtGui.QWidget()
         self.tab.setObjectName(newTabName)
         self.tablayout = QtGui.QGridLayout(self.tab)
         self.centralwidget.addTab(self.tab,"")
         newTabIndex = self.centralwidget.indexOf(self.tab)
-	if filename == "":
-	    filename = "Untitled" + str((newTabIndex + 1))	
-	newTabTitle = str(filename) + str(ext)
+        if filename == "":
+            filename = "Untitled" + str((newTabIndex + 1))	
+        newTabTitle = str(filename) + str(ext)
         self.centralwidget.setCurrentIndex(self.centralwidget.indexOf(self.tab))
         self.centralwidget.setTabText(newTabIndex, QtGui.QApplication.translate("py_de", newTabTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.textEdit = QsciScintilla(self.tab)
@@ -197,17 +198,17 @@ class Ui_py_de(object):
 
     def openFile(self):
         fileName = QFileDialog.getOpenFileName()
-	print fileName
-	index = fileName.lastIndexOf("/")
-	newFileName = fileName[index+1:]
-	print newFileName
-	self.createTab(py_de, "", newFileName)
-	self.textEdit.setText(open(fileName).read())
+        print fileName
+        index = fileName.lastIndexOf("/")
+        newFileName = fileName[index+1:]
+        print newFileName
+        self.createTab(py_de, "", newFileName)
+        self.textEdit.setText(open(fileName).read())
 
     def saveFile(self):
         fileName = QFileDialog.getSaveFileName()
-	f = open(fileName, "w")
-	f.write(self.textEdit.text())
+        f = open(fileName, "w")
+        f.write(self.textEdit.text())
 
     def saveAsFile(self):
         QKeySequence(self.textEdit.trUtf8("Ctrl+Shft+S", "File|Save As"))
@@ -225,28 +226,29 @@ class Ui_py_de(object):
         QKeySequence(self.textEdit.trUtf8("Ctrl+F", "Edit|Find"))
 
     def newPythonFile(self):
-	ext = ".py"
-	self.createTab(py_de, ext)
+        ext = ".py"
+        self.createTab(py_de, ext)
 
     def newCFile(self):
-	ext = ".cpp"
-	self.createTab(py_de, ext)
+        ext = ".cpp"
+        self.createTab(py_de, ext)
 
     def newCHeaderFile(self):
-	ext = ".h"
-	self.createTab(py_de, ext)
+        ext = ".h"
+        self.createTab(py_de, ext)
 
     def newFortranFile(self):
-	ext = ".f"
-	self.createTab(py_de, ext)
+        ext = ".f"
+        self.createTab(py_de, ext)
 
     def closeTab(self):
-        QKeySequence(self.textEdit.trUtf8("Ctrl+W", "File|Close file"))
+        self.centralwidget.removeTab(self.centralwidget.currentIndex())
 
-	####################################
-        ## Function for adding actions to 
-	## various menu items.
-        ####################################
+
+	    ##################################
+        ## Function for adding actions to
+	    ## various menu items.
+        ##################################
 
     def createActions(self, py_de):
         self.actionCopy = QtGui.QAction(py_de)
@@ -374,7 +376,7 @@ class Ui_py_de(object):
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
-	####################################
+	    ####################################
         ## Method for creating a toolbar
         ####################################
 
@@ -386,12 +388,12 @@ class Ui_py_de(object):
         self.toolBar.addAction(self.actionBuild)
 
 
-	####################################
+	    ####################################
         ## Method for creating menus
         ####################################
 
     def createMenus(self, py_de):
-	self.menubar = QtGui.QMenuBar(py_de)
+        self.menubar = QtGui.QMenuBar(py_de)
         self.menubar.setGeometry(QtCore.QRect(0,0,502,26))
         self.menubar.setObjectName("menubar")
 
@@ -438,7 +440,7 @@ class Ui_py_de(object):
         self.actionSave.setText(QtGui.QApplication.translate("py_de", "Save", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_As.setText(QtGui.QApplication.translate("py_de", "Save As", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPrint.setText(QtGui.QApplication.translate("py_de", "Print", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionClose.setText(QtGui.QApplication.translate("py_de", "Close file", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionClose.setText(QtGui.QApplication.translate("py_de", "Close", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuit.setText(QtGui.QApplication.translate("py_de", "Quit Py-DE", None, QtGui.QApplication.UnicodeUTF8))
         self.actionBuild.setText(QtGui.QApplication.translate("py_de", "Build", None, QtGui.QApplication.UnicodeUTF8))
         self.actionBuild_All.setText(QtGui.QApplication.translate("py_de", "Build All", None, QtGui.QApplication.UnicodeUTF8))
@@ -450,7 +452,7 @@ class Ui_py_de(object):
         self.actionC.setText(QtGui.QApplication.translate("py_de", "C++ Implementation File (.cpp)", None, QtGui.QApplication.UnicodeUTF8))
         self.actionPython_File.setText(QtGui.QApplication.translate("py_de", "Python File (.py)", None, QtGui.QApplication.UnicodeUTF8))
         self.actionC_Header_File_h.setText(QtGui.QApplication.translate("py_de", "C++ Header File (.h)", None, QtGui.QApplication.UnicodeUTF8))
-	self.centralwidget.setTabText(self.centralwidget.indexOf(self.tab), QtGui.QApplication.translate("py_de", "Untitled 1", None, QtGui.QApplication.UnicodeUTF8))
+        self.centralwidget.setTabText(self.centralwidget.indexOf(self.tab), QtGui.QApplication.translate("py_de", "Untitled 1", None, QtGui.QApplication.UnicodeUTF8))
 
    
     def template(self, language):
@@ -467,8 +469,8 @@ class Ui_py_de(object):
 	   QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8), 
 	   templates)  
       if res:
-	#load template in the editor      
-	self.textEdit.setText(o.loadTemplates(language, template))
+		#load template in the editor      
+		self.textEdit.setText(o.loadTemplates(language, template))
 	
 
 if __name__ == "__main__":
