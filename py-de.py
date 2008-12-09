@@ -121,6 +121,7 @@ class Ui_py_de(object):
 
         #self.createTab(py_de)
 
+        QtCore.QObject.connect(self.actionNewTemplate,QtCore.SIGNAL("activated()"),self.newTemplate)
         QtCore.QObject.connect(self.actionClose,QtCore.SIGNAL("triggered()"),self.closeTab)
         QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
         QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile)
@@ -137,7 +138,7 @@ class Ui_py_de(object):
         QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
         QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
         QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
-	QtCore.QObject.connect(self.actionNewTemplate,QtCore.SIGNAL("activated()"),self.newTemplate)
+	
 
         QtCore.QMetaObject.connectSlotsByName(py_de)
 
@@ -344,8 +345,8 @@ class Ui_py_de(object):
         self.actionC_Header_File_h.setIcon(QtGui.QIcon("images/file-header.png"))
         self.actionC_Header_File_h.setObjectName("actionC_Header_File_h")
 	
-	self.actionNewTemplate = QtGui.QAction(py_de)
-	self.actionNewTemplate.setObjectName("actionNewTemplate")
+        self.actionNewTemplate = QtGui.QAction(py_de)
+        self.actionNewTemplate.setObjectName("actionNewTemplate")
 
         self.menuNew.setIcon(QtGui.QIcon("images/document-new.png"))
 
@@ -373,7 +374,7 @@ class Ui_py_de(object):
         self.menuBuild.addAction(self.actionRun)
         self.menuBuild.addAction(self.actionClean)
         self.menuTools.addAction(self.menuFormat.menuAction())
-	self.menuTools.addAction(self.actionNewTemplate)
+        self.menuTools.addAction(self.actionNewTemplate)
         self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
@@ -458,7 +459,7 @@ class Ui_py_de(object):
         self.actionPython_File.setText(QtGui.QApplication.translate("py_de", "Python File (.py)", None, QtGui.QApplication.UnicodeUTF8))
         self.actionC_Header_File_h.setText(QtGui.QApplication.translate("py_de", "C++ Header File (.h)", None, QtGui.QApplication.UnicodeUTF8))
         self.centralwidget.setTabText(self.centralwidget.indexOf(self.tab), QtGui.QApplication.translate("py_de", "Untitled 1", None, QtGui.QApplication.UnicodeUTF8))
-	self.actionNewTemplate.setText(QtGui.QApplication.translate("py_de", "Add file as new template", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionNewTemplate.setText(QtGui.QApplication.translate("py_de", "Add file as new template", None, QtGui.QApplication.UnicodeUTF8))
 	
     def newTemplate(self):
       o = pydeTemplates.pydeTemplates("templates")
@@ -470,22 +471,22 @@ class Ui_py_de(object):
       
       language, res = QtGui.QInputDialog.getItem(self.centralwidget, 
            QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8), 
-	   QtGui.QApplication.translate("py_de", "Choose language", None, QtGui.QApplication.UnicodeUTF8), 
-	   listLanguage)  
-      if res:   
-        templateName, res = QtGui.QInputDialog.getText(self.centralwidget,  QtGui.QApplication.translate("py_de", "Template name", None, QtGui.QApplication.UnicodeUTF8),QtGui.QApplication.translate("py_de", "Template name", None, QtGui.QApplication.UnicodeUTF8)
-             )
+           QtGui.QApplication.translate("py_de", "Choose language", None, QtGui.QApplication.UnicodeUTF8), 
+           listLanguage)  
+      if res:
+        templateName, res = QtGui.QInputDialog.getText(self.centralwidget, 
+            QtGui.QApplication.translate("py_de", "Template name", None, QtGui.QApplication.UnicodeUTF8), 
+            QtGui.QApplication.translate("py_de", "Template name", None, QtGui.QApplication.UnicodeUTF8))
         if res:
-	  lang = ""
-	  if language == "Fortran":
-	    lang="f"
-	  elif language == "C++":
-	    lang="cpp"  
-	  elif language == "Python":
-	    lang="py" 
-		  
-	  o.newTemplate(self.textEdit.text(), lang, templateName)
-   
+          lang=""
+          if language == "Fortran":
+            lang="f"
+          elif language == "C++":
+            lang="cpp"
+          elif language == "Python":
+            lang="py"
+        o.newTemplate(self.textEdit.text(), lang, templateName)
+
     def template(self, language):
       # Upgrade: in tools menu, add some functionalities for templates (add/remove template...) - 
       
@@ -497,13 +498,11 @@ class Ui_py_de(object):
       #display dialogbox with a listbox containing list of templates
       template, res = QtGui.QInputDialog.getItem(self.centralwidget, 
            QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8), 
-	   QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8), 
-	   templates)  
+           QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8), 
+           templates)  
       if res:
-	#load template in the editor      
-	self.textEdit.setText(o.loadTemplate(language, template))
-	
-	
+        #load template in the editor      
+        self.textEdit.setText(o.loadTemplate(language, template))
 
 if __name__ == "__main__":
     import sys
