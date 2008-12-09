@@ -7,50 +7,50 @@ sLine = ""
 class pydeTemplates:
       
   def getTemplatesListOf(self,language):    
-    file = QtCore.QFile(self.filename)	
+    #file = QtCore.QFile(self.filename)	
     listTemplates = QtCore.QStringList()
-    if( file.open( QIODevice.ReadOnly) ): 
-      ts = QtCore.QTextStream(file)   
+    file = open(self.filename, 'r')
 
-      while True:
-  	line = str(ts.readLine())     
-     	if line == "":
-	  #end of file
-	  break	  
-        if line.find("<" + language + ">") != -1:
-	  #right language
-	  #get template name
-	  listTemplates.append(line.split(" ", 1)[1])
+    for line in  file.readlines():
+      if line.find("<" + language + ">") != -1:
+	#right language
+	#get template name
+	listTemplates.append(line.split(" ", 1)[1].strip())
 	
-      file.close()
+    file.close()
     return listTemplates
 
-  def loadTemplates(self, language, template):
-    file = QtCore.QFile(self.filename)	
+  def loadTemplate(self, language, template):
+    file = open(self.filename, 'r')	
     templateContent = ""
-    if( file.open( QIODevice.ReadOnly) ): 
-      ts = QtCore.QTextStream(file)  
-      while True:
-        line = str(ts.readLine())     
-	if line.find("<" + language + ">") != -1:
-	  #first check right language
-	  if line.split(" ", 1)[0].strip("<>") == language:
-	    #second, check right template
-	    if line.split(" ", 1)[1] == template:
-	      #read and store template    
-              while True:
-	        line = str(ts.readLine()) 
-	        if line.find("<end>") != -1:
-		  break
-	        else:
-		  templateContent += line + "\n"
-	      #template read, leave file reading
-              break
-	if line == "":
-	  #end of file
-	  break	     
-      
+    read = False
+    for line in file.readlines():
+      print line
+      if read:
+	#template found => read template      
+	if line.find("<end>") != -1:
+          break
+	else:
+          templateContent += line 
+      elif line.find("<" + language + ">") != -1:
+	#first check right language
+	if line.split(" ", 1)[0].strip("<>") == language:
+	  #second, check right template
+	  if line.split(" ", 1)[1].strip() == template:
+	    #read and store template    
+            read = True
     return templateContent
+	      
+  def newTemplate(self, template, language, name):
+    file = QtCore.QFile(self.filename)	
+    if( file.open( QIODevice.Append) ):
+      buf = "\n<"
+      buf += language
+      buf += "> "
+      buf += name + "\n"
+      buf += template
+      buf += "\n<end>"
+      file.write(str(buf))
   
   def __init__(self, filename):
     self.filename = filename
