@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 
-from PyQt4 import QtCore, QtGui, QtCore
+from PyQt4 import *
+from PyQt4.QtCore import *
+from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QFont, QTextEdit, QCloseEvent, QFileDialog, QMenu
+from PyQt4.QtGui import QInputDialog, QPrinter, QPainter, QPaintDevice
 from PyQt4.Qsci import QsciScintilla, QsciScintillaBase, QsciLexerPython
 import pydeTemplates
 
 class Ui_py_de(object):
     def setupUi(self, py_de):
+        self.printer = QPrinter()
 
         ####################################
-        ## Set up our initial window object 
+        ## Set up our initial window object
         ####################################
 
         py_de.setObjectName("py_de")
@@ -32,73 +36,73 @@ class Ui_py_de(object):
 	    ####################################
         ## The actual text box.
         ####################################
-	
+
         self.textEdit = QsciScintilla(self.tab)
 
         #####################################
-        ### Set the sytnax highlighting.
+        ### Set the syntax highlighting.
         #####################################
-        
+
         ## define the font to use
-        font = QtGui.QFont()
-        font.setFamily("Consolas")
-        font.setFixedPitch(True)
-        font.setPointSize(10)
+        self.font = QtGui.QFont()
+        self.font.setFamily("Consolas")
+        self.font.setFixedPitch(True)
+        self.font.setPointSize(10)
         # the font metrics here will help
         # building the margin width later
-        fm = QtGui.QFontMetrics(font)
+        self.fm = QtGui.QFontMetrics(self.font)
 
         ## set the default font of the editor
         ## and take the same font for line numbers
-        self.textEdit.setFont(font)
-        self.textEdit.setMarginsFont(font)
+        self.textEdit.setFont(self.font)
+        self.textEdit.setMarginsFont(self.font)
 
         ## Line numbers
-        # conventionnaly, margin 0 is for line numbers
-        self.textEdit.setMarginWidth(0, fm.width( "00000" ) + 5)
+        # conventionaly, margin 0 is for line numbers
+        self.textEdit.setMarginWidth(0, self.fm.width( "00000" ) + 5)
         self.textEdit.setMarginLineNumbers(0, True)
 
-        ## Edge Mode shows a red vetical bar at 80 chars
+        ## Edge Mode shows a red vertical bar at 80 chars
         self.textEdit.setEdgeMode(QsciScintilla.EdgeLine)
         self.textEdit.setEdgeColumn(80)
         self.textEdit.setEdgeColor(QtGui.QColor("#FF0000"))
-            
+
         ## Folding visual : we will use boxes
         self.textEdit.setFolding(QsciScintilla.BoxedTreeFoldStyle)
-        
+
         ## Braces matching
         self.textEdit.setBraceMatching(QsciScintilla.SloppyBraceMatch)
-        
+
         ## Editing line color
         self.textEdit.setCaretLineVisible(True)
         self.textEdit.setCaretLineBackgroundColor(QtGui.QColor("#CDA869"))
-        
+
         ## Margins colors
         # line numbers margin
         self.textEdit.setMarginsBackgroundColor(QtGui.QColor("#333333"))
         self.textEdit.setMarginsForegroundColor(QtGui.QColor("#CCCCCC"))
-        
+
         # folding margin colors (foreground,background)
         self.textEdit.setFoldMarginColors(QtGui.QColor("#99CC66"),QtGui.QColor("#333300"))
-        
+
         ## Choose a lexer
         lexer = QsciLexerPython()
-        lexer.setDefaultFont(font)
+        lexer.setDefaultFont(self.font)
         self.textEdit.setLexer(lexer)
-        
+
         ## Render on screen
-        self.textEdit.show()      
+        self.textEdit.show()
 
         ## Show this file in the self.textEdit
 
         #####################################
-        ## end of syntax highlighting.  
+        ## end of syntax highlighting.
         #####################################
-        
+
 	    ####################################
         ## Set up the sizes of everything
         ####################################
-	
+
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Policy(1),QtGui.QSizePolicy.Policy(1))
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -121,24 +125,27 @@ class Ui_py_de(object):
 
         #self.createTab(py_de)
 
-        QtCore.QObject.connect(self.actionNewTemplate,QtCore.SIGNAL("activated()"),self.newTemplate)
-        QtCore.QObject.connect(self.actionClose,QtCore.SIGNAL("triggered()"),self.closeTab)
-        QtCore.QObject.connect(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
-        QtCore.QObject.connect(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile)
-        QtCore.QObject.connect(self.actionSave,QtCore.SIGNAL("activated()"),self.saveFile) 
-        QtCore.QObject.connect(self.actionSave_As,QtCore.SIGNAL("activated()"),self.saveAsFile)
-        QtCore.QObject.connect(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
-        QtCore.QObject.connect(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
-        QtCore.QObject.connect(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
-        QtCore.QObject.connect(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
-        QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),self.newPythonFile)
-        QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),self.newCFile)
-        QtCore.QObject.connect(self.actionC_Header_File_h,QtCore.SIGNAL("activated()"),self.newCHeaderFile)
-        QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),self.newFortranFile)
-        QtCore.QObject.connect(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
-        QtCore.QObject.connect(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
-        QtCore.QObject.connect(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
-	
+        conn = QtCore.QObject.connect
+        conn(self.actionNewTemplate,QtCore.SIGNAL("activated()"),self.newTemplate)
+        conn(self.actionClose,QtCore.SIGNAL("triggered()"),self.closeTab)
+        conn(self.actionQuit,QtCore.SIGNAL("activated()"),py_de.close)
+        conn(self.actionOpen,QtCore.SIGNAL("activated()"),self.openFile)
+        conn(self.actionPrint,QtCore.SIGNAL("activated()"),self.printFile)
+        conn(self.actionSave,QtCore.SIGNAL("activated()"),self.saveFile)
+        conn(self.actionSave_As,QtCore.SIGNAL("activated()"),self.saveAsFile)
+        conn(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
+        conn(self.actionGo_To_Line,QtCore.SIGNAL("activated()"),self.goToLine)
+        conn(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
+        conn(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
+        conn(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
+        conn(self.actionPython_File,QtCore.SIGNAL("activated()"),self.newPythonFile)
+        conn(self.actionC,QtCore.SIGNAL("activated()"),self.newCFile)
+        conn(self.actionC_Header_File_h,QtCore.SIGNAL("activated()"),self.newCHeaderFile)
+        conn(self.actionFortran,QtCore.SIGNAL("activated()"),self.newFortranFile)
+        conn(self.actionPython_File,QtCore.SIGNAL("activated()"),lambda x="py":self.template(x))
+        conn(self.actionC,QtCore.SIGNAL("activated()"),lambda x="cpp":self.template(x))
+        conn(self.actionFortran,QtCore.SIGNAL("activated()"),lambda x="f":self.template(x))
+
 
         QtCore.QMetaObject.connectSlotsByName(py_de)
 
@@ -157,19 +164,14 @@ class Ui_py_de(object):
         self.centralwidget.addTab(self.tab,"")
         newTabIndex = self.centralwidget.indexOf(self.tab)
         if filename == "":
-            filename = "Untitled" + str((newTabIndex + 1))	
+            filename = "Untitled" + str((newTabIndex + 1))
         newTabTitle = str(filename) + str(ext)
         self.centralwidget.setCurrentIndex(self.centralwidget.indexOf(self.tab))
         self.centralwidget.setTabText(newTabIndex, QtGui.QApplication.translate("py_de", newTabTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.textEdit = QsciScintilla(self.tab)
-        font = QtGui.QFont()
-        font.setFamily("Consolas")
-        font.setFixedPitch(True)
-        font.setPointSize(10)
-        fm = QtGui.QFontMetrics(font)
-        self.textEdit.setFont(font)
-        self.textEdit.setMarginsFont(font)
-        self.textEdit.setMarginWidth(0, fm.width( "00000" ) + 5)
+        self.textEdit.setFont(self.font)
+        self.textEdit.setMarginsFont(self.font)
+        self.textEdit.setMarginWidth(0, self.fm.width( "00000" ) + 5)
         self.textEdit.setMarginLineNumbers(0, True)
         self.textEdit.setEdgeMode(QsciScintilla.EdgeLine)
         self.textEdit.setEdgeColumn(80)
@@ -182,7 +184,7 @@ class Ui_py_de(object):
         self.textEdit.setMarginsForegroundColor(QtGui.QColor("#CCCCCC"))
         self.textEdit.setFoldMarginColors(QtGui.QColor("#99CC66"),QtGui.QColor("#333300"))
         lexer = QsciLexerPython()
-        lexer.setDefaultFont(font)
+        lexer.setDefaultFont(self.font)
         self.textEdit.setLexer(lexer)
         self.textEdit.show()
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Policy(1),QtGui.QSizePolicy.Policy(1))
@@ -207,6 +209,29 @@ class Ui_py_de(object):
         self.createTab(py_de, "", newFileName)
         self.textEdit.setText(open(fileName).read())
 
+    def printFile(self):
+        margin = 10
+        pageNum = 1
+
+        printJob = QPainter()
+        printJob.begin(self.printer)
+        printJob.setFont(self.font)
+        yPos = 0
+
+        for i in range(self.textEdit.lines()):
+            if margin + yPos > self.printer.height() - margin:
+                pageNum += 1
+                self.printer.newPage()
+                yPos = 0
+#            printJob.drawText(margin, margin + yPos, self.printer.width(),
+#                             self.fm.lineSpacing(), QtCore.TextExpandTabs)
+
+
+
+#/#
+
+
+
     def saveFile(self):
         fileName = QFileDialog.getSaveFileName()
         f = open(fileName, "w")
@@ -214,6 +239,19 @@ class Ui_py_de(object):
 
     def saveAsFile(self):
         QKeySequence(self.textEdit.trUtf8("Ctrl+Shft+S", "File|Save As"))
+        fileName = QFileDialog.getSaveFileName()
+        f = open(fileName, "w")
+        f.write(self.textEdit.text())
+
+    def goToLine(self):
+        maxLine = str(self.textEdit.lines())
+        newLineNumber, ok = QInputDialog.getInteger(self.centralwidget,
+                                                    "Go to line",
+                                                    "Line number: (1, " + maxLine+")")
+        if ok:
+            pass
+            # TODO: Find docs on qscintilla's gotoline(int)
+
 
     def cut(self):
         QKeySequence(self.textEdit.trUtf8("Ctrl+X", "Edit|Cut"))
@@ -344,7 +382,7 @@ class Ui_py_de(object):
         self.actionC_Header_File_h = QtGui.QAction(py_de)
         self.actionC_Header_File_h.setIcon(QtGui.QIcon("images/file-header.png"))
         self.actionC_Header_File_h.setObjectName("actionC_Header_File_h")
-	
+
         self.actionNewTemplate = QtGui.QAction(py_de)
         self.actionNewTemplate.setObjectName("actionNewTemplate")
 
@@ -460,22 +498,22 @@ class Ui_py_de(object):
         self.actionC_Header_File_h.setText(QtGui.QApplication.translate("py_de", "C++ Header File (.h)", None, QtGui.QApplication.UnicodeUTF8))
         self.centralwidget.setTabText(self.centralwidget.indexOf(self.tab), QtGui.QApplication.translate("py_de", "Untitled 1", None, QtGui.QApplication.UnicodeUTF8))
         self.actionNewTemplate.setText(QtGui.QApplication.translate("py_de", "Add file as new template", None, QtGui.QApplication.UnicodeUTF8))
-	
+
     def newTemplate(self):
       o = pydeTemplates.pydeTemplates("templates")
-      
+
       listLanguage = QtCore.QStringList()
       listLanguage.append("Fortran")
       listLanguage.append("Python")
       listLanguage.append("C++")
-      
-      language, res = QtGui.QInputDialog.getItem(self.centralwidget, 
-           QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8), 
-           QtGui.QApplication.translate("py_de", "Choose language", None, QtGui.QApplication.UnicodeUTF8), 
-           listLanguage)  
+
+      language, res = QtGui.QInputDialog.getItem(self.centralwidget,
+           QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8),
+           QtGui.QApplication.translate("py_de", "Choose language", None, QtGui.QApplication.UnicodeUTF8),
+           listLanguage)
       if res:
-        templateName, res = QtGui.QInputDialog.getText(self.centralwidget, 
-            QtGui.QApplication.translate("py_de", "Template name", None, QtGui.QApplication.UnicodeUTF8), 
+        templateName, res = QtGui.QInputDialog.getText(self.centralwidget,
+            QtGui.QApplication.translate("py_de", "Template name", None, QtGui.QApplication.UnicodeUTF8),
             QtGui.QApplication.translate("py_de", "Template name", None, QtGui.QApplication.UnicodeUTF8))
         if res:
           lang=""
@@ -488,35 +526,34 @@ class Ui_py_de(object):
         o.newTemplate(self.textEdit.text(), lang, templateName)
 
     def template(self, language):
-      # Upgrade: in tools menu, add some functionalities for templates (add/remove template...) - 
-      
+      # Upgrade: in tools menu, add some functionalities for templates (add/remove template...) -
+
       #load list of templates for language selected
       o = pydeTemplates.pydeTemplates("templates")
       templates  = QtCore.QStringList(o.getTemplatesListOf(language))
       templates.prepend("Empty")
-      
+
       #display dialogbox with a listbox containing list of templates
-      template, res = QtGui.QInputDialog.getItem(self.centralwidget, 
-           QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8), 
-           QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8), 
-           templates)  
+      template, res = QtGui.QInputDialog.getItem(self.centralwidget,
+           QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8),
+           QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8),
+           templates)
       if res:
-        #load template in the editor      
+        #load template in the editor
         self.textEdit.setText(o.loadTemplate(language, template))
 
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-    
+
     #Select language according to the user
     translator = QtCore.QTranslator()
     locale = QtCore.QLocale.system().name().section('_', 0, 0)
     #translator.load(QtCore.QString("pyde_") + locale)  #or translator.load("pyde_fr"); to have directly french version
     app.installTranslator(translator)
-    
+
     py_de = QtGui.QMainWindow()
     ui = Ui_py_de()
     ui.setupUi(py_de)
     py_de.show()
     sys.exit(app.exec_())
-
