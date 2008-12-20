@@ -219,7 +219,8 @@ class Ui_py_de(object):
             printJob.begin(self.printer)
             printJob.setFont(self.font)
             fm = printJob.fontMetrics()
-
+#int textHeight (int linenr) const
+#
             #textRect = printJob.boundingRect(margin, )
             for i in range(self.textEdit.lines()):
                 if margin + yPos > self.printer.height() - margin:
@@ -259,7 +260,9 @@ class Ui_py_de(object):
                                                     "Go to line",
                                                     "Line number: (1, " + maxLine+")")
         if ok:
-            pass
+            newLineNumber -= 1  # Convert from 1-based to 0-based
+            self.textEdit.ensureLineVisible(newLineNumber)
+            self.textEdit.setCursorPosition(newLineNumber, 0)
             # TODO: Find docs on qscintilla's gotoline(int)
 
 
@@ -302,50 +305,62 @@ class Ui_py_de(object):
 
     def createActions(self, py_de):
         self.actionCopy = QtGui.QAction(py_de)
+        self.actionCopy.setShortcut("Ctrl+C")
         self.actionCopy.setIcon(QtGui.QIcon("images/edit-copy.png"))
         self.actionCopy.setObjectName("actionCopy")
 
         self.actionCut = QtGui.QAction(py_de)
+        self.actionCut.setShortcut("Ctrl+X")
         self.actionCut.setIcon(QtGui.QIcon("images/edit-cut.png"))
         self.actionCut.setObjectName("actionCut")
 
         self.actionPaste = QtGui.QAction(py_de)
+        self.actionPaste.setShortcut("Ctrl+V")
         self.actionPaste.setIcon(QtGui.QIcon("images/edit-paste.png"))
         self.actionPaste.setObjectName("actionPaste")
 
         self.actionSelect_All = QtGui.QAction(py_de)
+        self.actionSelect_All.setShortcut("Ctrl+A")
         self.actionSelect_All.setIcon(QtGui.QIcon("images/edit-select-all.png"))
         self.actionSelect_All.setObjectName("actionSelect_All")
 
         self.actionFind = QtGui.QAction(py_de)
+        self.actionFind.setShortcut("Ctrl+F")
         self.actionFind.setIcon(QtGui.QIcon("images/edit-find.png"))
         self.actionFind.setObjectName("actionFind")
 
         self.actionReplace = QtGui.QAction(py_de)
+        self.actionReplace.setShortcut("Ctrl+H")
         self.actionReplace.setIcon(QtGui.QIcon("images/PLACEHOLDER.jpg"))
         self.actionReplace.setObjectName("actionReplace")
 
         self.actionGo_To_Line = QtGui.QAction(py_de)
+        self.actionGo_To_Line.setShortcut("Ctrl+G")
         self.actionGo_To_Line.setIcon(QtGui.QIcon("images/PLACEHOLDER.jpg"))
         self.actionGo_To_Line.setObjectName("actionGo_To_Line")
 
         self.actionOpen = QtGui.QAction(py_de)
+        self.actionOpen.setShortcut("Ctrl+O")
         self.actionOpen.setIcon(QtGui.QIcon("images/document-open.png"))
         self.actionOpen.setObjectName("actionOpen")
 
         self.actionSave = QtGui.QAction(py_de)
+        self.actionSave.setShortcut("Ctrl+S")
         self.actionSave.setIcon(QtGui.QIcon("images/document-save.png"))
         self.actionSave.setObjectName("actionSave")
 
         self.actionSave_As = QtGui.QAction(py_de)
+        self.actionSave_As.setShortcut("Ctrl+Shift+S")
         self.actionSave_As.setIcon(QtGui.QIcon("images/document-save-as.png"))
         self.actionSave_As.setObjectName("actionSave_As")
 
         self.actionPrint = QtGui.QAction(py_de)
+        self.actionPrint.setShortcut("Ctrl+P")
         self.actionPrint.setIcon(QtGui.QIcon("images/document-print.png"))
         self.actionPrint.setObjectName("actionPrint")
 
         self.actionClose = QtGui.QAction(py_de)
+        self.actionClose.setShortcut("Ctrl+W")
         self.actionClose.setIcon(QtGui.QIcon("images/dialog-close.png"))
         self.actionClose.setObjectName("actionClose")
 
@@ -354,18 +369,22 @@ class Ui_py_de(object):
         self.actionQuit.setObjectName("actionQuit")
 
         self.actionBuild = QtGui.QAction(py_de)
+        self.actionBuild.setShortcut("F7")
         self.actionBuild.setIcon(QtGui.QIcon("images/run-build-file.png"))
         self.actionBuild.setObjectName("actionBuild")
 
         self.actionBuild_All = QtGui.QAction(py_de)
+        self.actionBuild_All.setShortcut("Ctrl+Alt+F7")
         self.actionBuild_All.setIcon(QtGui.QIcon("images/run-build.png"))
         self.actionBuild_All.setObjectName("actionBuild_All")
 
         self.actionRun = QtGui.QAction(py_de)
+        self.actionRun.setShortcut("F5")
         self.actionRun.setIcon(QtGui.QIcon("images/arrow-right.png"))
         self.actionRun.setObjectName("actionRun")
 
         self.actionClean = QtGui.QAction(py_de)
+        self.actionClean.setShortcut("Ctrl+Shift+C")
         self.actionClean.setIcon(QtGui.QIcon("images/edit-clear.png"))
         self.actionClean.setObjectName("actionClean")
 
@@ -518,7 +537,7 @@ class Ui_py_de(object):
       listLanguage.append("C++")
 
       language, res = QtGui.QInputDialog.getItem(self.centralwidget,
-           QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8),
+           QtGui.QApplication.translate("py_de", "Language templates", None, QtGui.QApplication.UnicodeUTF8),
            QtGui.QApplication.translate("py_de", "Choose language", None, QtGui.QApplication.UnicodeUTF8),
            listLanguage)
       if res:
@@ -545,7 +564,7 @@ class Ui_py_de(object):
 
       #display dialogbox with a listbox containing list of templates
       template, res = QtGui.QInputDialog.getItem(self.centralwidget,
-           QtGui.QApplication.translate("py_de", "Python templates", None, QtGui.QApplication.UnicodeUTF8),
+           QtGui.QApplication.translate("py_de", "Language templates", None, QtGui.QApplication.UnicodeUTF8),
            QtGui.QApplication.translate("py_de", "Choose template", None, QtGui.QApplication.UnicodeUTF8),
            templates)
       if res:
