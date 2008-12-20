@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
-from PyQt4 import *
-from PyQt4.QtCore import *
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QFont, QTextEdit, QCloseEvent, QFileDialog, QMenu
-from PyQt4.QtGui import QInputDialog, QPrinter, QPainter, QPaintDevice
+from PyQt4.QtGui import QInputDialog, QPrintDialog, QPrinter, QPainter
+from PyQt4.QtGui import QDialog, QPaintDevice
 from PyQt4.Qsci import QsciScintilla, QsciScintillaBase, QsciLexerPython
 import pydeTemplates
 
@@ -210,22 +209,33 @@ class Ui_py_de(object):
         self.textEdit.setText(open(fileName).read())
 
     def printFile(self):
-        margin = 10
-        pageNum = 1
+        printDialog = QPrintDialog(self.printer, py_de)
+        if printDialog.exec_() == QDialog.Accepted:
+            margin = 10
+            pageNum = 1
+            yPos = 0
 
-        printJob = QPainter()
-        printJob.begin(self.printer)
-        printJob.setFont(self.font)
-        yPos = 0
+            printJob = QPainter()
+            printJob.begin(self.printer)
+            printJob.setFont(self.font)
+            fm = printJob.fontMetrics()
 
-        for i in range(self.textEdit.lines()):
-            if margin + yPos > self.printer.height() - margin:
-                pageNum += 1
-                self.printer.newPage()
-                yPos = 0
-#            printJob.drawText(margin, margin + yPos, self.printer.width(),
-#                             self.fm.lineSpacing(), QtCore.TextExpandTabs)
+            #textRect = printJob.boundingRect(margin, )
+            for i in range(self.textEdit.lines()):
+                if margin + yPos > self.printer.height() - margin:
+                    pageNum += 1
+                    self.printer.newPage()
+                    yPos = 0
+                printJob.drawText(margin,               # X
+                                  margin + yPos,        # Y
+                                  self.printer.width(), # Width
+                                  self.printer.height(),# Height
+                                  QtCore.Qt.AlignTop,       # Alignment
+                                  self.textEdit.text(i - 1)# The text to print
 
+                                  )
+                yPos += fm.lineSpacing()
+            printJob.end
 
 
 #/#
