@@ -10,13 +10,14 @@ import pydeTemplates
 class Ui_py_de(object):
     def setupUi(self, py_de):
         self.printer = QPrinter()
+        self.imagesDir = "images/"
 
         ####################################
         ## Set up our initial window object
         ####################################
 
         py_de.setObjectName("py_de")
-        py_de.resize(QtCore.QSize(QtCore.QRect(0,0,800,570).size()).expandedTo(py_de.minimumSizeHint()))
+        py_de.resize(QtCore.QSize(QtCore.QRect(0, 0, 800, 570).size()).expandedTo(py_de.minimumSizeHint()))
 
         self.centralwidget = QtGui.QTabWidget(py_de)
         self.centralwidget.setObjectName("centralwidget")
@@ -133,7 +134,7 @@ class Ui_py_de(object):
         conn(self.actionSave,QtCore.SIGNAL("activated()"),self.saveFile)
         conn(self.actionSave_As,QtCore.SIGNAL("activated()"),self.saveAsFile)
         conn(self.actionSelect_All,QtCore.SIGNAL("activated()"),self.textEdit.selectAll)
-        conn(self.actionGo_To_Line,QtCore.SIGNAL("activated()"),self.goToLine)
+        conn(self.actionGoToLine,QtCore.SIGNAL("activated()"),self.goToLine)
         conn(self.actionCopy,QtCore.SIGNAL("activated()"),self.textEdit.copy)
         conn(self.actionCut,QtCore.SIGNAL("activated()"),self.textEdit.cut)
         conn(self.actionPaste,QtCore.SIGNAL("activated()"),self.textEdit.paste)
@@ -208,20 +209,17 @@ class Ui_py_de(object):
         self.createTab(py_de, "", newFileName)
         self.textEdit.setText(open(fileName).read())
 
-    def printFile(self):
+    def printFile(self): # Needs some work...
         printDialog = QPrintDialog(self.printer, py_de)
         if printDialog.exec_() == QDialog.Accepted:
             margin = 10
             pageNum = 1
             yPos = 0
-
             printJob = QPainter()
             printJob.begin(self.printer)
             printJob.setFont(self.font)
             fm = printJob.fontMetrics()
-#int textHeight (int linenr) const
-#
-            #textRect = printJob.boundingRect(margin, )
+
             for i in range(self.textEdit.lines()):
                 if margin + yPos > self.printer.height() - margin:
                     pageNum += 1
@@ -233,15 +231,9 @@ class Ui_py_de(object):
                                   self.printer.height(),# Height
                                   QtCore.Qt.AlignTop,       # Alignment
                                   self.textEdit.text(i - 1)# The text to print
-
                                   )
                 yPos += fm.lineSpacing()
             printJob.end
-
-
-#/#
-
-
 
     def saveFile(self):
         fileName = QFileDialog.getSaveFileName()
@@ -303,146 +295,57 @@ class Ui_py_de(object):
 	    ## various menu items.
         ##################################
 
+    # Generates python code to create menu items then execs it
+    # Should never be passed any input from a user or a file.
+    def initAction(self, actionName, menus = None, shortCutKeys = None, iconFileName = None):
+        assert actionName[0:6] == "action"
+        commands = list()
+        commands.append("self." + actionName + "=QtGui.QAction(py_de)")
+        if shortCutKeys:
+            commands.append("self." + actionName + ".setShortcut('" + shortCutKeys + "')")
+        if iconFileName:
+           commands.append("self." + actionName + ".setIcon(QtGui.QIcon('" + self.imagesDir + iconFileName + "'))")
+        commands.append("self." + actionName + ".setObjectName('" + actionName + "')" )
+        if menus:
+            assert type(menus) == type(()) or type(menus) == type("string")
+            if type(menus) == type("string"): # Add action to only one menu
+                commands.append("self." + menus + ".addAction(self." + actionName + ")")
+            else: # Menus is a tuple of menus on which to add this action
+                for menu in menus:
+                    commands.append("self." + menu + ".addAction(self." + actionName + ")")
+        for command in commands:
+            exec(command, globals(), locals())
+
     def createActions(self, py_de):
-        self.actionCopy = QtGui.QAction(py_de)
-        self.actionCopy.setShortcut("Ctrl+C")
-        self.actionCopy.setIcon(QtGui.QIcon("images/edit-copy.png"))
-        self.actionCopy.setObjectName("actionCopy")
-
-        self.actionCut = QtGui.QAction(py_de)
-        self.actionCut.setShortcut("Ctrl+X")
-        self.actionCut.setIcon(QtGui.QIcon("images/edit-cut.png"))
-        self.actionCut.setObjectName("actionCut")
-
-        self.actionPaste = QtGui.QAction(py_de)
-        self.actionPaste.setShortcut("Ctrl+V")
-        self.actionPaste.setIcon(QtGui.QIcon("images/edit-paste.png"))
-        self.actionPaste.setObjectName("actionPaste")
-
-        self.actionSelect_All = QtGui.QAction(py_de)
-        self.actionSelect_All.setShortcut("Ctrl+A")
-        self.actionSelect_All.setIcon(QtGui.QIcon("images/edit-select-all.png"))
-        self.actionSelect_All.setObjectName("actionSelect_All")
-
-        self.actionFind = QtGui.QAction(py_de)
-        self.actionFind.setShortcut("Ctrl+F")
-        self.actionFind.setIcon(QtGui.QIcon("images/edit-find.png"))
-        self.actionFind.setObjectName("actionFind")
-
-        self.actionReplace = QtGui.QAction(py_de)
-        self.actionReplace.setShortcut("Ctrl+H")
-        self.actionReplace.setIcon(QtGui.QIcon("images/PLACEHOLDER.jpg"))
-        self.actionReplace.setObjectName("actionReplace")
-
-        self.actionGo_To_Line = QtGui.QAction(py_de)
-        self.actionGo_To_Line.setShortcut("Ctrl+G")
-        self.actionGo_To_Line.setIcon(QtGui.QIcon("images/PLACEHOLDER.jpg"))
-        self.actionGo_To_Line.setObjectName("actionGo_To_Line")
-
-        self.actionOpen = QtGui.QAction(py_de)
-        self.actionOpen.setShortcut("Ctrl+O")
-        self.actionOpen.setIcon(QtGui.QIcon("images/document-open.png"))
-        self.actionOpen.setObjectName("actionOpen")
-
-        self.actionSave = QtGui.QAction(py_de)
-        self.actionSave.setShortcut("Ctrl+S")
-        self.actionSave.setIcon(QtGui.QIcon("images/document-save.png"))
-        self.actionSave.setObjectName("actionSave")
-
-        self.actionSave_As = QtGui.QAction(py_de)
-        self.actionSave_As.setShortcut("Ctrl+Shift+S")
-        self.actionSave_As.setIcon(QtGui.QIcon("images/document-save-as.png"))
-        self.actionSave_As.setObjectName("actionSave_As")
-
-        self.actionPrint = QtGui.QAction(py_de)
-        self.actionPrint.setShortcut("Ctrl+P")
-        self.actionPrint.setIcon(QtGui.QIcon("images/document-print.png"))
-        self.actionPrint.setObjectName("actionPrint")
-
-        self.actionClose = QtGui.QAction(py_de)
-        self.actionClose.setShortcut("Ctrl+W")
-        self.actionClose.setIcon(QtGui.QIcon("images/dialog-close.png"))
-        self.actionClose.setObjectName("actionClose")
-
-        self.actionQuit = QtGui.QAction(py_de)
-        self.actionQuit.setIcon(QtGui.QIcon("images/application-exit.png"))
-        self.actionQuit.setObjectName("actionQuit")
-
-        self.actionBuild = QtGui.QAction(py_de)
-        self.actionBuild.setShortcut("F7")
-        self.actionBuild.setIcon(QtGui.QIcon("images/run-build-file.png"))
-        self.actionBuild.setObjectName("actionBuild")
-
-        self.actionBuild_All = QtGui.QAction(py_de)
-        self.actionBuild_All.setShortcut("Ctrl+Alt+F7")
-        self.actionBuild_All.setIcon(QtGui.QIcon("images/run-build.png"))
-        self.actionBuild_All.setObjectName("actionBuild_All")
-
-        self.actionRun = QtGui.QAction(py_de)
-        self.actionRun.setShortcut("F5")
-        self.actionRun.setIcon(QtGui.QIcon("images/arrow-right.png"))
-        self.actionRun.setObjectName("actionRun")
-
-        self.actionClean = QtGui.QAction(py_de)
-        self.actionClean.setShortcut("Ctrl+Shift+C")
-        self.actionClean.setIcon(QtGui.QIcon("images/edit-clear.png"))
-        self.actionClean.setObjectName("actionClean")
-
-        self.actionAbout = QtGui.QAction(py_de)
-        self.actionAbout.setIcon(QtGui.QIcon("images/help-about.png"))
-        self.actionAbout.setObjectName("actionAbout")
-
-        self.actionSelect_Language = QtGui.QAction(py_de)
-        self.actionSelect_Language.setIcon(QtGui.QIcon("images/PLACEHOLDER.jpg"))
-        self.actionSelect_Language.setObjectName("actionSelect_Language")
-
-        self.actionFortran = QtGui.QAction(py_de)
-        self.actionFortran.setIcon(QtGui.QIcon("images/file-fortran.png"))
-        self.actionFortran.setObjectName("actionFortran")
-
-        self.actionC = QtGui.QAction(py_de)
-        self.actionC.setIcon(QtGui.QIcon("images/file-cpp.png"))
-        self.actionC.setObjectName("actionC")
-
-        self.actionPython_File = QtGui.QAction(py_de)
-        self.actionPython_File.setIcon(QtGui.QIcon("images/file-python.png"))
-        self.actionPython_File.setObjectName("actionPython_File")
-
-        self.actionC_Header_File_h = QtGui.QAction(py_de)
-        self.actionC_Header_File_h.setIcon(QtGui.QIcon("images/file-header.png"))
-        self.actionC_Header_File_h.setObjectName("actionC_Header_File_h")
-
-        self.actionNewTemplate = QtGui.QAction(py_de)
-        self.actionNewTemplate.setObjectName("actionNewTemplate")
-
-        self.menuNew.setIcon(QtGui.QIcon("images/document-new.png"))
-
-
-        self.menuNew.addAction(self.actionC)
-        self.menuNew.addAction(self.actionC_Header_File_h)
-        self.menuNew.addAction(self.actionPython_File)
-        self.menuNew.addAction(self.actionFortran)
         self.menuFile.addAction(self.menuNew.menuAction())
-        self.menuFile.addAction(self.actionOpen)
-        self.menuFile.addAction(self.actionSave)
-        self.menuFile.addAction(self.actionSave_As)
-        self.menuFile.addAction(self.actionClose)
-        self.menuFile.addAction(self.actionPrint)
-        self.menuFile.addAction(self.actionQuit)
-        self.menuEdit.addAction(self.actionCopy)
-        self.menuEdit.addAction(self.actionCut)
-        self.menuEdit.addAction(self.actionPaste)
-        self.menuEdit.addAction(self.actionSelect_All)
-        self.menuEdit.addAction(self.actionFind)
-        self.menuEdit.addAction(self.actionReplace)
-        self.menuEdit.addAction(self.actionGo_To_Line)
-        self.menuBuild.addAction(self.actionBuild)
-        self.menuBuild.addAction(self.actionBuild_All)
-        self.menuBuild.addAction(self.actionRun)
-        self.menuBuild.addAction(self.actionClean)
+        self.initAction("actionCopy","menuEdit", "Ctrl+C", "edit-copy.png")
+        self.initAction("actionCut", "menuEdit", "Ctrl+X", "edit-cut.png")
+        self.initAction("actionPaste", "menuEdit", "Ctrl+V", "edit-paste.png")
+        self.initAction("actionSelect_All", "menuEdit", "Ctrl+A", "edit-select-all.png")
+        self.initAction("actionFind", "menuEdit", "Ctrl+F", "edit-find.png")
+        self.initAction("actionReplace", "menuEdit", "Ctrl+H")
+        self.initAction("actionGoToLine", "menuEdit", "Ctrl+G")
+        self.initAction("actionOpen", "menuFile", "Ctrl+O", "document-open.png")
+        self.initAction("actionSave", "menuFile", "Ctrl+S", "document-save.png")
+        self.initAction("actionSave_As", "menuFile", "Ctrl+Shift+S", "document-save-as.png")
+        self.initAction("actionPrint", "menuFile", "Ctrl+P", "document-print.png")
+        self.initAction("actionClose", "menuFile", "Ctrl+W", "dialog-close.png")
+        self.initAction("actionQuit", "menuFile", None, "application-exit.png")
+        self.initAction("actionBuild", "menuBuild", "F7", "run-build-file.png")
+        self.initAction("actionBuild_All", "menuBuild", "Ctrl+Alt+F7", "run-build.png")
+        self.initAction("actionRun", "menuBuild", "F5", "arrow-right.png")
+        self.initAction("actionClean", "menuBuild", "Ctrl+Shift+C", "edit-clear.png")
+        self.initAction("actionAbout", "menuHelp", None, "help-about.png")
+        self.initAction("actionSelect_Language", None, None, None)
+        self.initAction("actionFortran", "menuNew", None, "file-fortran.png")
+        self.initAction("actionC", "menuNew", None, "file-cpp.png")
+        self.initAction("actionPython_File", "menuNew", "file-python.png")
+        self.initAction("actionC_Header_File_h", "menuNew", None, "file-header.png")
+        self.initAction("actionNewTemplate", ("menuNew", "menuTools"), None, "document-new.png")
+
+        self.menuNew.setIcon(QtGui.QIcon(self.imagesDir + "document-new.png"))
         self.menuTools.addAction(self.menuFormat.menuAction())
-        self.menuTools.addAction(self.actionNewTemplate)
-        self.menuHelp.addAction(self.actionAbout)
+
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuBuild.menuAction())
@@ -508,7 +411,7 @@ class Ui_py_de(object):
         self.actionSelect_All.setText(QtGui.QApplication.translate("py_de", "Select All", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFind.setText(QtGui.QApplication.translate("py_de", "Find", None, QtGui.QApplication.UnicodeUTF8))
         self.actionReplace.setText(QtGui.QApplication.translate("py_de", "Replace", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionGo_To_Line.setText(QtGui.QApplication.translate("py_de", "Go To Line", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionGoToLine.setText(QtGui.QApplication.translate("py_de", "Go To Line", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpen.setText(QtGui.QApplication.translate("py_de", "Open", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave.setText(QtGui.QApplication.translate("py_de", "Save", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_As.setText(QtGui.QApplication.translate("py_de", "Save As", None, QtGui.QApplication.UnicodeUTF8))
